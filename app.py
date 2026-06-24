@@ -156,15 +156,15 @@ if search_name:
 
         df_features = df_features.merge(df_cluster_base[["기관코드", "AI_군집번호"]], on="기관코드", how="left")
         cluster_name_map = {0: "유사기관군 A", 1: "유사기관군 B", 2: "유사기관군 C"}
-        df_features["AI_구매패턴"] = df_features["AI_군집번호"].map(cluster_name_map)
-        df_features.loc[df_features["특수분류"] == "구매실적 미미/미이행", "AI_구매패턴"] = "구매실적 미미/미이행"
+        df_features["AI_유사기관군"] = df_features["AI_군집번호"].map(cluster_name_map)
+        df_features.loc[df_features["특수분류"] == "구매실적 미미/미이행", "AI_유사기관군"] = "구매실적 미미/미이행"
 
         # ===================================================
-        # 구매패턴별 특성 설명 생성
+        # 유사기관군별 특성 설명 생성
         # ===================================================
         pattern_summary_df = (
             df_features[df_features["특수분류"] == "일반"]
-            .groupby("AI_구매패턴")
+            .groupby("AI_유사기관군")
             .agg(
                 기관수=("기관코드", "count"), 평균_구매비율=(ratio_col, "mean"), 평균_녹색구매액=(green_amount_col, "mean"),
                 평균_총구매액=(total_amount_col, "mean"), 평균_변화량=(trend_col, "mean"),
@@ -182,23 +182,23 @@ if search_name:
             return f"{ratio_level}·{scale_level}·{trend_level}형 (기관 {int(row['기관수'])}개, 평균 구매비율 {row['평균_구매비율']:.1f}%, 평균 녹색구매액 {row['평균_녹색구매액']:,.0f}원)"
 
         pattern_summary_df["패턴설명"] = pattern_summary_df.apply(make_pattern_description, axis=1)
-        pattern_desc_map = dict(zip(pattern_summary_df["AI_구매패턴"], pattern_summary_df["패턴설명"]))
+        pattern_desc_map = dict(zip(pattern_summary_df["AI_유사기관군"], pattern_summary_df["패턴설명"]))
 
-        df_features["AI_구매패턴_설명"] = df_features["AI_구매패턴"].map(pattern_desc_map)
-        df_features.loc[df_features["AI_구매패턴"] == "구매실적 미미/미이행", "AI_구매패턴_설명"] = "최근 3년 구매비율 또는 총구매액이 0에 가까운 별도 관리 대상"
+        df_features["AI_유사기관군_설명"] = df_features["AI_유사기관군"].map(pattern_desc_map)
+        df_features.loc[df_features["AI_유사기관군"] == "구매실적 미미/미이행", "AI_유사기관군_설명"] = "최근 3년 구매비율 또는 총구매액이 0에 가까운 별도 관리 대상"
 
         centroids_original = scaler.inverse_transform(kmeans.cluster_centers_)
         centroid_df = pd.DataFrame(centroids_original, columns=cluster_features)
         centroid_df["AI_군집번호"] = range(n_clusters)
 
         # ===================================================
-        # 구매패턴 A/B/C 그룹별 핵심 지표 요약
+        # 유사기관군 A/B/C 그룹별 핵심 지표 요약
         # ===================================================
         pattern_stats = (
             df_features[df_features["특수분류"] == "일반"]
-            .groupby("AI_구매패턴")
+            .groupby("AI_유사기관군")
             .agg(기관수=("기관코드", "count"), 평균_구매비율=(ratio_col, "mean"), 평균_총구매액=(total_amount_col, "mean"), 평균_구매비율_변화량=(trend_col, "mean"))
-            .reset_index().sort_values("AI_구매패턴")
+            .reset_index().sort_values("AI_유사기관군")
         )
 
         def rank_text(rank, total):
@@ -215,7 +215,7 @@ if search_name:
 
             lines = []
             for _, row in stats_df.iterrows():
-                pattern = row["AI_구매패턴"]
+                pattern = row["AI_유사기관군"]
                 ratio_desc = rank_text(row["구매비율_순위"], n_patterns)
                 amount_desc = rank_text(row["총구매액_순위"], n_patterns)
                 trend_desc = rank_text(row["변화량_순위"], n_patterns)
@@ -228,8 +228,8 @@ if search_name:
             return "<br><br>".join(lines)
 
         all_pattern_summary_text = make_all_pattern_summary_text(pattern_stats)
-        df_features["AI_구매패턴_비교설명"] = all_pattern_summary_text
-        df_features.loc[df_features["AI_구매패턴"] == "구매실적 미미/미이행", "AI_구매패턴_비교설명"] = "최근 3년 구매비율 또는 총구매액이 0에 가까워 일반 구매패턴 비교에서는 별도 관리 대상입니다."
+        df_features["AI_유사기관군_비교설명"] = all_pattern_summary_text
+        df_features.loc[df_features["AI_유사기관군"] == "구매실적 미미/미이행", "AI_유사기관군_비교설명"] = "최근 3년 구매비율 또는 총구매액이 0에 가까워 일반 유사기관군 비교에서는 별도 관리 대상입니다."
 
         normal_df = df_features[df_features["특수분류"] == "일반"].copy()
         ai_ratio_boundary = normal_df[ratio_col].median()
@@ -262,7 +262,7 @@ if search_name:
         if not target_df.empty:
             target_row = target_df.iloc[0]
             ai_status = target_row["AI_사분면"]
-            pattern_name = target_row["AI_구매패턴"]
+            pattern_name = target_row["AI_유사기관군"]
             gap_str = f"{target_row['유형평균_대비_격차']:+.2f}%p"
             recent3_str = f"{target_row[trend_col]:+.2f}%p"
             current_ratio = target_row[ratio_col]
@@ -348,14 +348,14 @@ if search_name:
 
             # 좌상단 산점도
             cluster_colors = {
-                "구매패턴 A": "#A8D8EA",
-                "구매패턴 B": "#AAE3A1",
-                "구매패턴 C": "#F7C8E0",
+                "유사기관군 A": "#A8D8EA",
+                "유사기관군 B": "#AAE3A1",
+                "유사기관군 C": "#F7C8E0",
                 "구매실적 미미/미이행": "#D3D3D3",
             }
 
             for pattern_name, color in cluster_colors.items():
-                subset = df_features[df_features["AI_구매패턴"] == pattern_name]
+                subset = df_features[df_features["AI_유사기관군"] == pattern_name]
 
                 fig.add_trace(
                     go.Scatter(
@@ -412,7 +412,7 @@ if search_name:
                     go.Table(
                         header=dict(values=[""], height=0, line_color=trans_col),
                         cells=dict(
-                            values=[["<b>[ 분석 종합 리포트 ]</b>", txt_report_main, "", "<b>[ AI 구매패턴 및 상대 위치 ]</b>", txt_ai_position]],
+                            values=[["<b>[ 분석 종합 리포트 ]</b>", txt_report_main, "", "<b>[ AI 유사기관군 및 상대 위치 ]</b>", txt_ai_position]],
                             fill_color=[[hdr_bg, bdy_bg, trans_col, hdr_bg, box_bg]],
                             line_color=[[tbl_line, tbl_line, trans_col, tbl_line, box_border]],
                             font=dict(color=[[hdr_color, bdy_color, trans_col, hdr_color, bdy_color]], **tbl_font),
@@ -439,7 +439,7 @@ if search_name:
                     return f"{sign}{format_amount_won(abs(diff))}"
                 
                 def get_pattern_html(pattern):
-                    row = pattern_stats[pattern_stats["AI_구매패턴"] == pattern]
+                    row = pattern_stats[pattern_stats["AI_유사기관군"] == pattern]
                 
                     if row.empty:
                         return f"<b>{pattern}</b><br><br>데이터 없음"
