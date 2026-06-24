@@ -303,7 +303,24 @@ if search_name:
             }
             report_data = ai_report[ai_status]
 
-            txt_report_main = f"현재 위치: <b>{ai_status} ({report_data['pattern']})</b><br><br>{report_data['analysis']}"
+            def format_amount_precise(amount):
+                if amount >= 100000000:
+                    return f"{amount/100000000:.2f}억원"
+                elif amount >= 10000:
+                    return f"{amount/10000:.2f}만원"
+                else:
+                    return f"{amount:,.0f}원"
+
+            target_ratio_str = f"{target_row[ratio_col]:.2f}%"
+            target_green_amount_str = format_amount_precise(target_row[green_amount_col])
+            
+            txt_report_main = (
+                f"현재 위치: <b>{ai_status} ({report_data['pattern']})</b><br>"
+                f"최근 3년 평균 구매비율: <b>{target_ratio_str}</b><br>"
+                f"최근 3년 평균 녹색구매액: <b>{target_green_amount_str}</b><br><br>"
+                f"{report_data['analysis']}"
+            )
+            
             txt_ai_position = (
                 f"- 현재 검색 기관: {pattern_name}<br>- 검색기관 구매비율: {current_ratio:.2f}% ({ratio_rank})<br>"
                 f"- 최근3년 녹색구매액 평균: {green_amount_str} ({green_amount_rank})<br>- 최근3년 구매비율 변화량: {recent3_str} ({recent_rank})<br>"
@@ -311,7 +328,7 @@ if search_name:
             )
             txt_ai_criteria = (
                 "유사기관군 A/B/C는 최근 3년 구매 실적이 비슷한 기관들을 묶어 구분한 유형입니다.<br><br>구분 기준은 다음 2가지입니다.<br><br>"
-                "&nbsp;&nbsp;① 최근 3년 구매비율 평균(%)<br>&nbsp;&nbsp;② 최근 3년 총구매액 평균(억 원)<br><br>"
+                "&nbsp;&nbsp;① 최근 3년 평균 구매비율(%)<br>&nbsp;&nbsp;② 최근 3년 총구매액 평균(억 원)<br><br>"
                 "즉, 구매비율 수준과 기관의 구매규모(총구매액)를 함께 고려하여<br>유사한 기관끼리 묶은 결과입니다."
             )
             txt_ai_baseline = "- 가로 기준선: 최근 3년 구매비율 평균 중앙값<br>- 세로 기준선: 최근 3년 녹색구매액 평균 중앙값"
