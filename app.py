@@ -301,7 +301,7 @@ if search_name:
                 rows=4,
                 cols=2,
                 column_widths=[0.64, 0.36],
-                row_heights=[0.51, 0.08, 0.23, 0.29],
+                row_heights=[0.43, 0.10, 0.27, 0.20]
                 horizontal_spacing=0.04,
                 vertical_spacing=0.02,
                 specs=[
@@ -495,7 +495,7 @@ if search_name:
             title_suffix = f" [{SELECTED_TYPE}] 그룹 진단" if SELECTED_TYPE else " (전체 기관 기준)"
             fig.update_layout(
                 title=dict(text=f"<b>{CURRENT_YEAR}년 공공기관 녹색구매 위치찾기{title_suffix}</b>", x=0.5, xanchor="center"),
-                template="plotly_white", width=1500, height=1600, margin=dict(l=60, r=40, t=80, b=60),
+                template="plotly_white", width=1500, height=1500, margin=dict(l=60, r=40, t=80, b=60),
             )
 
             tick_vals = [10_000_000, 50_000_000, 100_000_000, 500_000_000, 1_000_000_000, 10_000_000_000, 100_000_000_000]
@@ -535,10 +535,10 @@ if search_name:
             left_x, right_x = x_boundary_pos / 2, (1 + x_boundary_pos) / 2
             bottom_y, top_y = y_boundary_pos / 2, (1 + y_boundary_pos) / 2
 
-            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=top_y, text="<b>우수형</b><br><span style='font-size:16px; color:black'>(구매율 높음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(46, 204, 113, 0.85)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=top_y, text="<b>성과유지형</b><br><span style='font-size:16px; color:black'>(구매율 높음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(212, 172, 13, 0.90)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(231, 76, 60, 0.85)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 작)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(52, 152, 219, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=top_y, text="<b>우수형</b><br><span style='font-size:25px; color:black'>(구매율 높음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(46, 204, 113, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=top_y, text="<b>성과유지형</b><br><span style='font-size:25px; color:black'>(구매율 높음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(212, 172, 13, 0.90)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:25px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(231, 76, 60, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:25px; color:black'>(구매율 낮음, 구매규모 작)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(52, 152, 219, 0.85)"))
 
             fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.44, text=("<span style='color:#A8D8EA'>●</span> 구매패턴 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 구매패턴 B&nbsp;&nbsp;&nbsp;<span style='color:#F7C8E0'>●</span> 구매패턴 C&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
 
