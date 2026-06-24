@@ -62,6 +62,9 @@ streamlit run app.py
 ---
 
 # 🌍 Green Purchasing Position Finder for Public Institutions
+🔗 **Demo:** https://green-echo-dashboard-demo.streamlit.app/
+
+> The demo may take a few moments to load if inactive.
 
 ## Project Overview
 
