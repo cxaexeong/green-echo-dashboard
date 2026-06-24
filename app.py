@@ -155,7 +155,7 @@ if search_name:
         df_cluster_base["AI_군집번호"] = kmeans.fit_predict(X_scaled)
 
         df_features = df_features.merge(df_cluster_base[["기관코드", "AI_군집번호"]], on="기관코드", how="left")
-        cluster_name_map = {0: "구매패턴 A", 1: "구매패턴 B", 2: "구매패턴 C"}
+        cluster_name_map = {0: "유사기관군 A", 1: "유사기관군 B", 2: "유사기관군 C"}
         df_features["AI_구매패턴"] = df_features["AI_군집번호"].map(cluster_name_map)
         df_features.loc[df_features["특수분류"] == "구매실적 미미/미이행", "AI_구매패턴"] = "구매실적 미미/미이행"
 
@@ -286,7 +286,7 @@ if search_name:
                 f"- 동일유형 평균대비 격차: {gap_str}"
             )
             txt_ai_criteria = (
-                "구매패턴 A/B/C는 최근 3년 구매 실적이 비슷한 기관들을 묶어 구분한 유형입니다.<br><br>구분 기준은 다음 2가지입니다.<br><br>"
+                "유사기관군 A/B/C는 최근 3년 구매 실적이 비슷한 기관들을 묶어 구분한 유형입니다.<br><br>구분 기준은 다음 2가지입니다.<br><br>"
                 "&nbsp;&nbsp;① 최근 3년 구매비율 평균(%)<br>&nbsp;&nbsp;② 최근 3년 총구매액 평균(억 원)<br><br>"
                 "즉, 구매비율 수준과 기관의 구매규모(총구매액)를 함께 고려하여<br>유사한 기관끼리 묶은 결과입니다."
             )
@@ -434,23 +434,34 @@ if search_name:
                     ), row=3, col=2,
                 )
 
+                def format_amount_diff(diff):
+                    sign = "+" if diff >= 0 else "-"
+                    return f"{sign}{format_amount_won(abs(diff))}"
+                
                 def get_pattern_html(pattern):
                     row = pattern_stats[pattern_stats["AI_구매패턴"] == pattern]
-                    if row.empty: return f"<b>{pattern}</b><br><br>데이터 없음"
+                
+                    if row.empty:
+                        return f"<b>{pattern}</b><br><br>데이터 없음"
+                
                     row = row.iloc[0]
-                    tmp = pattern_stats.copy()
-                    tmp["구매비율_순위"] = tmp["평균_구매비율"].rank(ascending=False, method="min").astype(int)
-                    tmp["총구매액_순위"] = tmp["평균_총구매액"].rank(ascending=False, method="min").astype(int)
-                    tmp["변화량_순위"] = tmp["평균_구매비율_변화량"].rank(ascending=False, method="min").astype(int)
-                    r_rank = tmp[tmp["AI_구매패턴"] == pattern].iloc[0]
-                    n_pat = len(pattern_stats)
+                
+                    target_ratio = target_row[ratio_col]
+                    target_total = target_row[total_amount_col]
+                    target_trend = target_row[trend_col]
+                    target_gap = target_row["유형평균_대비_격차"]
+                
+                    ratio_diff = target_ratio - row["평균_구매비율"]
+                    total_diff = target_total - row["평균_총구매액"]
+                
                     return (
-                        f"<b>{pattern}</b><br><br>- 최근 3년 평균 구매비율: {row['평균_구매비율']:.2f}%<br>"
-                        f"- 최근 3년 총구매액 평균: {format_amount_won(row['평균_총구매액'])}<br>"
-                        f"- 최근 3년 구매비율 변화량 평균: {row['평균_구매비율_변화량']:+.2f}%p<br><br>- 추가 설명<br>"
-                        f"&nbsp;&nbsp;ㆍ평균 구매비율은 {rank_text(r_rank['구매비율_순위'], n_pat)} 수준입니다.<br>"
-                        f"&nbsp;&nbsp;ㆍ총구매액 규모는 {rank_text(r_rank['총구매액_순위'], n_pat)} 기관군입니다.<br>"
-                        f"&nbsp;&nbsp;ㆍ구매비율 변화량은 {rank_text(r_rank['변화량_순위'], n_pat)} 수준입니다."
+                        f"<b>{pattern}</b><br><br>"
+                        f"- 기관군 평균 구매비율: {row['평균_구매비율']:.2f}% "
+                        f"(검색기관 {ratio_diff:+.2f}%p)<br>"
+                        f"- 기관군 평균 총구매액: {format_amount_won(row['평균_총구매액'])} "
+                        f"(검색기관 {format_amount_diff(total_diff)})<br>"
+                        f"- 검색기관 구매비율 변화량: {target_trend:+.2f}%p<br>"
+                        f"- 동일유형 평균대비 격차: {target_gap:+.2f}%p"
                     )
 
                 fig.add_trace(
@@ -458,7 +469,7 @@ if search_name:
                         columnwidth=[0.33, 0.33, 0.33],
                         header=dict(values=["", "", ""], height=0, line_color=trans_col),
                         cells=dict(
-                            values=[[get_pattern_html("구매패턴 A"), ""], [get_pattern_html("구매패턴 B"), ""], [get_pattern_html("구매패턴 C"), ""]],
+                            values=[[get_pattern_html("유사기관군 A"), ""], [get_pattern_html("유사기관군 B"), ""], [get_pattern_html("유사기관군 C"), ""]],
                             fill_color=[["white", trans_col]] * 3,
                             line_color=[[tbl_line, trans_col]] * 3,
                             font=dict(size=15, color=bdy_color, family="Malgun Gothic"),
@@ -540,7 +551,7 @@ if search_name:
             fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(231, 76, 60, 0.85)"))
             fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(52, 152, 219, 0.85)"))
 
-            fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#A8D8EA'>●</span> 구매패턴 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 구매패턴 B&nbsp;&nbsp;&nbsp;<span style='color:#F7C8E0'>●</span> 구매패턴 C&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
+            fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#A8D8EA'>●</span> 유사기관군 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 유사기관군 B&nbsp;&nbsp;&nbsp;<span style='color:#F7C8E0'>●</span> 유사기관군 C&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
 
             if not target_df.empty:
                 fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=1.01, text=f"<b>📊 {target_df.iloc[0]['기관명']} 최근 3년 실적 추이 📊</b>", showarrow=False, xanchor="center", yanchor="bottom", font=dict(size=16, color="#1f3a5f"))
