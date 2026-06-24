@@ -535,15 +535,15 @@ if search_name:
             left_x, right_x = x_boundary_pos / 2, (1 + x_boundary_pos) / 2
             bottom_y, top_y = y_boundary_pos / 2, (1 + y_boundary_pos) / 2
 
-            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=top_y, text="<b>우수형</b><br><span style='font-size:11px; color:black'>(구매율 높음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(46, 204, 113, 0.85)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=top_y, text="<b>성과유지형</b><br><span style='font-size:11px; color:black'>(구매율 높음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(212, 172, 13, 0.90)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:11px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(231, 76, 60, 0.85)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:11px; color:black'>(구매율 낮음, 구매규모 작)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(52, 152, 219, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=top_y, text="<b>우수형</b><br><span style='font-size:16px; color:black'>(구매율 높음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(46, 204, 113, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=top_y, text="<b>성과유지형</b><br><span style='font-size:16px; color:black'>(구매율 높음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(212, 172, 13, 0.90)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(231, 76, 60, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 작)</span>", showarrow=False, align="center", font=dict(size=16, color="rgba(52, 152, 219, 0.85)"))
 
             fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.44, text=("<span style='color:#A8D8EA'>●</span> 구매패턴 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 구매패턴 B&nbsp;&nbsp;&nbsp;<span style='color:#F7C8E0'>●</span> 구매패턴 C&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
 
             if not target_df.empty:
-                fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=1.01, text=f"<b>📊 {target_df.iloc[0]['기관명']} 최근 3년 실적 추이 📊</b>", showarrow=False, xanchor="center", yanchor="bottom", font=dict(size=14, color="#1f3a5f"))
+                fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=1.01, text=f"<b>📊 {target_df.iloc[0]['기관명']} 최근 3년 실적 추이 📊</b>", showarrow=False, xanchor="center", yanchor="bottom", font=dict(size=16, color="#1f3a5f"))
                 fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=0.44, text=("<span style='color:#ff8db3'>■</span> 연도별 녹색구매액&nbsp;&nbsp;&nbsp;<span style='color:#9bd86f'>━●</span> 연도별 구매비율"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
 
             return fig
