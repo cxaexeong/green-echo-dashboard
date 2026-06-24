@@ -461,7 +461,7 @@ if search_name:
                             values=[[get_pattern_html("구매패턴 A"), ""], [get_pattern_html("구매패턴 B"), ""], [get_pattern_html("구매패턴 C"), ""]],
                             fill_color=[["white", trans_col]] * 3,
                             line_color=[[tbl_line, trans_col]] * 3,
-                            font=dict(size=11, color=bdy_color, family="Malgun Gothic"),
+                            font=dict(size=15, color=bdy_color, family="Malgun Gothic"),
                             align="left", height=28,
                         ),
                     ), row=4, col=1,
