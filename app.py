@@ -526,8 +526,8 @@ if search_name:
             fig.add_shape(type="line", xref="x1", yref="y1", x0=ai_amount_line, x1=ai_amount_line, y0=vertical_line_y0, y1=vertical_line_y1, line=dict(color="black", width=1.5, dash="dash"))
 
             fig.add_annotation(xref="x1", yref="y1", x=np.log10(horizontal_line_x1), y=ai_ratio_line, text=ratio_label, showarrow=False, font=dict(size=11, color="black"), xanchor="right", yanchor="bottom", yshift=5)
-            fig.add_annotation(xref="x1", yref="y1", x=np.log10(ai_amount_line), y=vertical_line_y1 - (y_range[1] - y_range[0]) * 0.60, text=amount_label, textangle=-90, showarrow=False, font=dict(size=11, color="black"), xanchor="center", xshift=15, yanchor="top")
-
+            fig.add_annotation(xref="x1", yref="y1", x=np.log10(ai_amount_line), y=vertical_line_y1, text=amount_label, textangle=-90, showarrow=False, font=dict(size=11, color="black"), xanchor="center", xshift=15, yanchor="top")
+            #y=vertical_line_y1 - (y_range[1] - y_range[0]) * 0.60
             xb_log = np.log10(ai_amount_line)
             x_boundary_pos = (xb_log - log_x_min_axis) / (log_x_max_axis - log_x_min_axis)
             y_boundary_pos = (ai_ratio_line - y_range[0]) / (y_range[1] - y_range[0])
