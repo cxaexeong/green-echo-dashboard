@@ -54,7 +54,7 @@ st.set_page_config(layout="wide")
 
 st.title("🌍 공공기관 녹색구매 위치 찾기 서비스")
 
-search_name = st.text_input("검색할 기관명을 입력하세요:").strip()
+search_name = st.text_input("검색할 기관명을 입력하세요 (산업연구원, 한국환경산업기술원 등):").strip()
 
 if search_name:
     find_target = df[(df["연도"] == CURRENT_YEAR) & (df["기관명"] == search_name)].copy()
@@ -73,7 +73,7 @@ if search_name:
         st.write(f"자동 판별된 통합기관유형: **{SELECTED_TYPE}**")
 
         # ===================================================
-        # [누락되었던 부분 복구] 4. 최근 3개년 기준 분석용 특징 생성
+        # 4. 최근 3개년 기준 분석용 특징 생성
         # ===================================================
         if SELECTED_TYPE:
             df_filtered = df[df["통합기관유형"] == SELECTED_TYPE].copy()
@@ -257,7 +257,7 @@ if search_name:
         target_df = df_features[df_features["기관명"] == target_row_current["기관명"]].copy()
 
         # ===================================================
-        # 8. 기관별 진단 리포트 생성 (UI용 텍스트 구조화)
+        # 8. 기관별 진단 리포트 생성
         # ===================================================
         if not target_df.empty:
             target_row = target_df.iloc[0]
@@ -294,7 +294,7 @@ if search_name:
             txt_ai_ref = "- 본 분석은 최근 3개년(2023~2025년) 데이터를 기반으로 합니다.<br>- '구매실적 미미/미이행' 기관은 군집분석에서 제외되었습니다."
 
         # ===================================================
-        # 9. 대시보드 생성 함수 (UI/UX 개선 레이아웃)
+        # 9. 대시보드 생성 함수 
         # ===================================================
         def make_current_dashboard():
             fig = make_subplots(
@@ -549,7 +549,7 @@ if search_name:
             return fig
 
         # ===================================================
-        # [누락되었던 부분 복구] 10. 생성된 대시보드 화면에 출력
+        # 10. 생성된 대시보드 화면에 출력
         # ===================================================
         with st.spinner('대시보드를 생성하는 중입니다...'):
             dashboard_fig = make_current_dashboard()
