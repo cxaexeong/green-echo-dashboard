@@ -301,7 +301,7 @@ if search_name:
                 rows=4,
                 cols=2,
                 column_widths=[0.64, 0.36],
-                row_heights=[0.51, 0.08, 0.23, 0.19],
+                row_heights=[0.51, 0.08, 0.23, 0.29],
                 horizontal_spacing=0.04,
                 vertical_spacing=0.02,
                 specs=[
@@ -495,7 +495,7 @@ if search_name:
             title_suffix = f" [{SELECTED_TYPE}] 그룹 진단" if SELECTED_TYPE else " (전체 기관 기준)"
             fig.update_layout(
                 title=dict(text=f"<b>{CURRENT_YEAR}년 공공기관 녹색구매 위치찾기{title_suffix}</b>", x=0.5, xanchor="center"),
-                template="plotly_white", width=1500, height=1300, margin=dict(l=60, r=40, t=80, b=60),
+                template="plotly_white", width=1500, height=1600, margin=dict(l=60, r=40, t=80, b=60),
             )
 
             tick_vals = [10_000_000, 50_000_000, 100_000_000, 500_000_000, 1_000_000_000, 10_000_000_000, 100_000_000_000]
