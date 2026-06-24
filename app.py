@@ -544,7 +544,7 @@ if search_name:
 
             if not target_df.empty:
                 fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=1.01, text=f"<b>📊 {target_df.iloc[0]['기관명']} 최근 3년 실적 추이 📊</b>", showarrow=False, xanchor="center", yanchor="bottom", font=dict(size=16, color="#1f3a5f"))
-                fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=0.44, text=("<span style='color:#ff8db3'>■</span> 연도별 녹색구매액&nbsp;&nbsp;&nbsp;<span style='color:#9bd86f'>━●</span> 연도별 구매비율"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
+                fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#ff8db3'>■</span> 연도별 녹색구매액&nbsp;&nbsp;&nbsp;<span style='color:#9bd86f'>━●</span> 연도별 구매비율"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
 
             return fig
 
