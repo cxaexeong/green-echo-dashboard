@@ -452,32 +452,24 @@ if search_name:
                         return f"<b>{pattern}</b><br><br>데이터 없음"
                 
                     row = row.iloc[0]
+                    is_target_group = pattern == target_row["AI_유사기관군"]
                 
-                    html = (
-                        f"<b>{pattern}</b><br><br>"
-                        f"- 최근 3년 평균 구매비율: {row['평균_구매비율']:.2f}%"
-                    )
+                    ratio_extra = ""
+                    total_amount_extra = ""
                 
-                    # 검색기관이 속한 유사기관군일 때만 차이값 표시
-                    if pattern == target_row["AI_유사기관군"]:
+                    if is_target_group:
                         ratio_diff = target_row[ratio_col] - row["평균_구매비율"]
-                        html += f" (검색기관 {ratio_diff:+.2f}%p)"
+                        total_amount_diff = target_row[total_amount_col] - row["평균_총구매액"]
                 
-                    html += (
-                        f"<br>"
-                        f"- 최근 3년 녹색구매액 평균: {format_amount_won(row['평균_녹색구매액'])}"
-                    )
+                        ratio_extra = f" (검색기관과 차이 {ratio_diff:+.2f}%p)"
+                        total_amount_extra = f" (검색기관과 차이 {format_amount_diff(total_amount_diff)})"
                 
-                    if pattern == target_row["AI_유사기관군"]:
-                        green_amount_diff = target_row[green_amount_col] - row["평균_녹색구매액"]
-                        html += f" (검색기관 {format_amount_diff(green_amount_diff)})"
-                
-                    html += (
-                        f"<br>"
+                    return (
+                        f"<b>{pattern}</b><br><br>"
+                        f"- 최근 3년 평균 구매비율: {row['평균_구매비율']:.2f}%{ratio_extra}<br>"
+                        f"- 최근 3년 총구매액 평균: {format_amount_won(row['평균_총구매액'])}{total_amount_extra}<br>"
                         f"- 최근 3년 구매비율 변화량 평균: {row['평균_구매비율_변화량']:+.2f}%p"
                     )
-                
-                    return html
 
                 fig.add_trace(
                     go.Table(
@@ -563,8 +555,8 @@ if search_name:
 
             fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=top_y, text="<b>우수형</b><br><span style='font-size:16px; color:black'>(구매율 높음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(46, 204, 113, 0.85)"))
             fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=top_y, text="<b>성과유지형</b><br><span style='font-size:16px; color:black'>(구매율 높음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(212, 172, 13, 0.90)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(231, 76, 60, 0.85)"))
-            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(52, 152, 219, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=left_x, y=bottom_y, text="<b>개선필요형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 작음)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(231, 76, 60, 0.85)"))
+            fig.add_annotation(xref="x domain", yref="y domain", x=right_x, y=bottom_y, text="<b>잠재성장형</b><br><span style='font-size:16px; color:black'>(구매율 낮음, 구매규모 큼)</span>", showarrow=False, align="center", font=dict(size=25, color="rgba(52, 152, 219, 0.85)"))
 
             fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#A8D8EA'>●</span> 유사기관군 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 유사기관군 B&nbsp;&nbsp;&nbsp;<span style='color:#F7C8E0'>●</span> 유사기관군 C&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
 
