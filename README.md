@@ -1,2 +1,2 @@
-https://github.com/cxaexeong/green-echo-dashboard.git
+Demo: https://green-echo-dashboard-demo.streamlit.app/
 (May take a few moments to load.)
