@@ -404,7 +404,7 @@ if search_name:
             if not target_df.empty:
                 hdr_bg, bdy_bg = "#eef3fb", "white"
                 hdr_color, bdy_color = "#1f3a5f", "#1f2933"
-                tbl_font = dict(size=12, family="Malgun Gothic")
+                tbl_font = dict(size=15, family="Malgun Gothic")
                 tbl_line, trans_col = "rgba(230,230,230,0.8)", "rgba(0,0,0,0)"
                 box_bg, box_border = "#f2f6fc", "#bacce4"
 
