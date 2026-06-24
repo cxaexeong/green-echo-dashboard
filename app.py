@@ -208,22 +208,22 @@ if search_name:
             .sort_values("AI_유사기관군")
         )
 
-        st.write("군집분석 기관 수:", len(df_features))
-        st.write(df_features["통합기관유형"].value_counts())
+        # st.write("군집분석 기관 수:", len(df_features))
+        # st.write(df_features["통합기관유형"].value_counts())
         
-        st.write("현재 분석 대상 기관유형:", SELECTED_TYPE)
+        # st.write("현재 분석 대상 기관유형:", SELECTED_TYPE)
 
-        st.dataframe(
-            pattern_stats[
-                [
-                    "AI_유사기관군",
-                    "기관수",
-                    "평균_구매비율",
-                    "평균_총구매액",
-                    "평균_구매비율_변화량",
-                ]
-            ]
-        )
+        # st.dataframe(
+        #     pattern_stats[
+        #         [
+        #             "AI_유사기관군",
+        #             "기관수",
+        #             "평균_구매비율",
+        #             "평균_총구매액",
+        #             "평균_구매비율_변화량",
+        #         ]
+        #     ]
+        # )
 
         def rank_text(rank, total):
             if rank == 1: return "가장 높은"
