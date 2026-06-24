@@ -207,6 +207,10 @@ if search_name:
             .reset_index()
             .sort_values("AI_유사기관군")
         )
+
+        st.write("군집분석 기관 수:", len(df_features))
+        st.write(df_features["통합기관유형"].value_counts())
+        
         st.write("현재 분석 대상 기관유형:", SELECTED_TYPE)
 
         st.dataframe(
