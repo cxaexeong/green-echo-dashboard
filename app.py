@@ -197,8 +197,15 @@ if search_name:
         pattern_stats = (
             df_features[df_features["특수분류"] == "일반"]
             .groupby("AI_유사기관군")
-            .agg(기관수=("기관코드", "count"), 평균_구매비율=(ratio_col, "mean"), 평균_총구매액=(total_amount_col, "mean"), 평균_구매비율_변화량=(trend_col, "mean"))
-            .reset_index().sort_values("AI_유사기관군")
+            .agg(
+                기관수=("기관코드", "count"),
+                평균_구매비율=(ratio_col, "mean"),
+                평균_녹색구매액=(green_amount_col, "mean"),
+                평균_총구매액=(total_amount_col, "mean"),
+                평균_구매비율_변화량=(trend_col, "mean"),
+            )
+            .reset_index()
+            .sort_values("AI_유사기관군")
         )
 
         def rank_text(rank, total):
@@ -446,23 +453,31 @@ if search_name:
                 
                     row = row.iloc[0]
                 
-                    target_ratio = target_row[ratio_col]
-                    target_total = target_row[total_amount_col]
-                    target_trend = target_row[trend_col]
-                    target_gap = target_row["유형평균_대비_격차"]
-                
-                    ratio_diff = target_ratio - row["평균_구매비율"]
-                    total_diff = target_total - row["평균_총구매액"]
-                
-                    return (
+                    html = (
                         f"<b>{pattern}</b><br><br>"
-                        f"- 기관군 평균 구매비율: {row['평균_구매비율']:.2f}% "
-                        f"(검색기관 {ratio_diff:+.2f}%p)<br>"
-                        f"- 기관군 평균 총구매액: {format_amount_won(row['평균_총구매액'])} "
-                        f"(검색기관 {format_amount_diff(total_diff)})<br>"
-                        f"- 검색기관 구매비율 변화량: {target_trend:+.2f}%p<br>"
-                        f"- 동일유형 평균대비 격차: {target_gap:+.2f}%p"
+                        f"- 최근 3년 평균 구매비율: {row['평균_구매비율']:.2f}%"
                     )
+                
+                    # 검색기관이 속한 유사기관군일 때만 차이값 표시
+                    if pattern == target_row["AI_유사기관군"]:
+                        ratio_diff = target_row[ratio_col] - row["평균_구매비율"]
+                        html += f" (검색기관 {ratio_diff:+.2f}%p)"
+                
+                    html += (
+                        f"<br>"
+                        f"- 최근 3년 녹색구매액 평균: {format_amount_won(row['평균_녹색구매액'])}"
+                    )
+                
+                    if pattern == target_row["AI_유사기관군"]:
+                        green_amount_diff = target_row[green_amount_col] - row["평균_녹색구매액"]
+                        html += f" (검색기관 {format_amount_diff(green_amount_diff)})"
+                
+                    html += (
+                        f"<br>"
+                        f"- 최근 3년 구매비율 변화량 평균: {row['평균_구매비율_변화량']:+.2f}%p"
+                    )
+                
+                    return html
 
                 fig.add_trace(
                     go.Table(
