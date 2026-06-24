@@ -301,7 +301,7 @@ if search_name:
                 rows=4,
                 cols=2,
                 column_widths=[0.64, 0.36],
-                row_heights=[0.43, 0.10, 0.27, 0.20]
+                row_heights=[0.43, 0.10, 0.27, 0.20],
                 horizontal_spacing=0.04,
                 vertical_spacing=0.02,
                 specs=[
