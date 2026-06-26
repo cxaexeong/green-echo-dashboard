@@ -390,7 +390,7 @@ if search_name:
             # 좌상단 산점도
             cluster_colors = {
                 "유사기관군 A": "#CDB4DB",
-                "유사기관군 B": "#73C6B6",
+                "유사기관군 B": "#1ABC9C",
                 "구매실적 미미/미이행": "#D3D3D3",
             }
 
@@ -593,7 +593,7 @@ if search_name:
 
             #fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#A8D8EA'>●</span> 유사기관군 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 유사기관군 B&nbsp;&nbsp;&nbsp;<span style='color:#F7C8E0'>●</span> 유사기관군 C&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
             #fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#A8D8EA'>●</span> 유사기관군 A&nbsp;&nbsp;&nbsp;<span style='color:#AAE3A1'>●</span> 유사기관군 B&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
-            fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#CDB4DB'>●</span> 유사기관군 A&nbsp;&nbsp;&nbsp;<span style='color:#73C6B6'>●</span> 유사기관군 B&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
+            fig.add_annotation(xref="x domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#CDB4DB'>●</span> 유사기관군 A&nbsp;&nbsp;&nbsp;<span style='color:#1ABC9C'>●</span> 유사기관군 B&nbsp;&nbsp;&nbsp;<span style='color:#000000'>★</span> 검색 기관"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
             if not target_df.empty:
                 fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=1.01, text=f"<b>📊 {target_df.iloc[0]['기관명']} 최근 3년 실적 추이 📊</b>", showarrow=False, xanchor="center", yanchor="bottom", font=dict(size=16, color="#1f3a5f"))
                 fig.add_annotation(xref="x2 domain", yref="paper", x=0.5, y=0.49, text=("<span style='color:#ff8db3'>■</span> 연도별 녹색구매액&nbsp;&nbsp;&nbsp;<span style='color:#9bd86f'>━●</span> 연도별 구매비율"), showarrow=False, xanchor="center", yanchor="middle", font=dict(size=12), bgcolor="white", bordercolor="#d9d9d9", borderwidth=1, borderpad=6)
